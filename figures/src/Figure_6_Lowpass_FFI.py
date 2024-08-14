@@ -26,49 +26,44 @@ step_F = pd.read_csv("./data/sims/Pospischil_step_sim_F.csv")
 step_t = pd.read_csv("./data/sims/Pospischil_step_sim_t.csv")
 
 
-I = 0.75
-g = 2.5
 VGS_tau = pd.read_csv(
-    "./data/sims/Pospischil_filter_sim_I_{}_g_{}_10_tau.csv".format(I, g), header=None)
+    "./data/sims/Pospischil_filter_sim_tau.csv", header=None)
 VGS_psth = pd.read_csv(
-    "./data/sims/Pospischil_filter_sim_I_{}_g_{}_10_psth.csv".format(I, g))
+    "./data/sims/Pospischil_filter_sim_psth.csv")
 VGS_psth_t = pd.read_csv(
-    "./data/sims/Pospischil_filter_sim_I_{}_g_{}_10_psth_t.csv".format(I, g))
+    "./data/sims/Pospischil_filter_sim_psth_t.csv")
 VGS_psth_array = np.array(
     [np.array(literal_eval(VGS_psth.iloc[i, 0])) for i in range(VGS_psth.shape[0])])
 VGS_psth_t_array = np.array([np.array(literal_eval(
     VGS_psth_t.iloc[i, 0])) for i in range(VGS_psth_t.shape[0])])
 
 
-I = 0.74
-g = 5.6
-gi = 2.45
 VGS_I_tau = pd.read_csv(
-    "./data/sims/Pospischil_filter_Inh_sim_I_{}_g_{}_gi_{}_10_tau.csv".format(I, g, gi), header=None)
+    "./data/sims/Pospischil_filter_Inh_sim_tau.csv", header=None)
 VGS_I_psth = pd.read_csv(
-    "./data/sims/Pospischil_filter_Inh_sim_I_{}_g_{}_gi_{}_10_psth.csv".format(I, g, gi))
+    "./data/sims/Pospischil_filter_Inh_sim_psth.csv")
 VGS_I_psth_t = pd.read_csv(
-    "./data/sims/Pospischil_filter_Inh_sim_I_{}_g_{}_gi_{}_10_psth_t.csv".format(I, g, gi))
+    "./data/sims/Pospischil_filter_Inh_sim_psth_t.csv")
 VGS_I_psth_array = np.array([np.array(literal_eval(
     VGS_I_psth.iloc[i, 0])) for i in range(VGS_I_psth.shape[0])])
 VGS_I_psth_t_array = np.array([np.array(literal_eval(
     VGS_I_psth_t.iloc[i, 0])) for i in range(VGS_I_psth_t.shape[0])])
 
 VGS_sum = pd.read_csv(
-    "./data/sims/Pospischil_TAU_filter_Inh_sim_I_{}_g_{}_gi_{}_10.csv".format(I, g, gi))
+    "./data/sims/Pospischil_TAU_filter_Inh_sim.csv")
 VGS_sum.rename(columns={"τ_step": "Step", "τ_VGS": "E",
                "τ_VGS_I": "E+I"}, inplace=True)
 
 VGS_sum_AI = pd.read_csv(
-    "./data/sims/Pospischil_TAU_filter_Inh_sim_I_{}_g_{}_gi_{}_10_AI.csv".format(I, g, gi))
+    "./data/sims/Pospischil_TAU_filter_Inh_sim_AI.csv")
 VGS_sum_AI.rename(columns={"AI_step": "Step",
                   "AI_VGS": "E", "AI_VGS_I": "E+I"}, inplace=True)
 
 
 t = pd.read_csv(
-    './data/exp/Extracell_PSTH_pop_PSTH_T_n_70_fit_1000_psth_50.csv', header=None)
+    './data/exp/Extracell_PSTH_pop_T.csv', header=None)
 VGS_narrow = pd.read_csv(
-    './data/exp/Extracell_PSTH_pop_VGS_NS_PSTH_n_70_fit_1000_psth_50.csv', header=None)
+    './data/exp/Extracell_PSTH_pop_VGS_NS.csv', header=None)
 
 
 s, p = stats.kruskal(VGS_sum["Step"], VGS_sum['E'],
@@ -118,14 +113,14 @@ df_BS_I = pd.DataFrame(columns=['Decay $\tau$ (ms)', 'condition'])
 df_BS_I['decay $\tau$'] = VGS_sum['E+I']
 df_BS_I['condition'] = "E+I"
 
-df_vgs = pd.read_csv('./data/exp/Summary_Decay_fit_250_psth_10.csv')
+df_vgs = pd.read_csv('./data/exp/Summary_Decay.csv')
 df_vgs_n = pd.DataFrame(columns=['decay $\tau$', 'condition'])
 df_vgs_n['decay $\tau$'] = np.log10(
     -1 / (df_vgs.loc[df_vgs.index[~df_vgs["VGS NS"].isnull()], "VGS NS"] / 1000))
 df_vgs_n['condition'] = "NS"
 
 df_tau_pop = pd.read_csv(
-    './data/exp/Extracell_PSTH_pop_decay_PSTH_n_70_fit_1000_psth_50.csv')
+    './data/exp/Extracell_PSTH_pop_decay.csv')
 df_pop_n = pd.DataFrame(columns=['decay $\tau$', 'condition'])
 df_pop_n['decay $\tau$'] = np.log10(-1 / (df_tau_pop['VGS NS'] / 1000))
 df_pop_n['condition'] = "Pop NS"
@@ -148,18 +143,18 @@ df_BS_I_AI['AI'] = VGS_sum_AI['E+I']
 df_BS_I_AI['condition'] = "E+I"
 
 df_offset_vivo = pd.read_csv(
-    './data/exp/extracell_offset_only_fit_250_psth_10.csv')
+    './data/exp/extracell_offset.csv')
 df_coeff_vivo = pd.read_csv(
-    './data/exp/extracell_coefficient_only_fit_250_psth_10.csv')
+    './data/exp/extracell_coefficient.csv')
 df_AI_vivo = df_offset_vivo / (df_offset_vivo + df_coeff_vivo)
 df_vgs_n_AI = pd.DataFrame(columns=['AI', 'condition'])
 df_vgs_n_AI['AI'] = df_AI_vivo["VGS NS"]
 df_vgs_n_AI['condition'] = "NS"
 
 df_pop_offset = pd.read_csv(
-    './data/exp/Extracell_PSTH_pop_offset_PSTH_n_70_fit_1000_psth_50.csv')
+    './data/exp/Extracell_PSTH_pop_offset.csv')
 df_pop_coeff = pd.read_csv(
-    './data/exp/Extracell_PSTH_pop_coeff_PSTH_n_70_fit_1000_psth_50.csv')
+    './data/exp/Extracell_PSTH_pop_coeff.csv')
 df_pop_AI = df_pop_offset / (df_pop_offset + df_pop_coeff)
 df_pop_n_AI = pd.DataFrame(columns=['AI', 'condition'])
 df_pop_n_AI['AI'] = df_pop_AI['VGS NS']

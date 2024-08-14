@@ -67,7 +67,7 @@ tau_step = fit_sq.param[2]
 
 
 #%% Read in Patch Tau
-df = DataFrame(CSV.File("./data/exp/Summary_Decay_fit_250_psth_10.csv"))
+df = DataFrame(CSV.File("./data/exp/Summary_Decay.csv"))
 τ_Patch = -1 ./ (df[isnan.(df[!, "Patch NS"]).==0, "Patch NS"] / 1000)
 
 

@@ -15,25 +15,16 @@ import string
 plt.rcParams["font.family"] = "Arial"
 
 # %% load data
-t = pd.read_csv(
-    './data/exp/Extracell_PSTH_pop_PSTH_T_n_70_fit_1000_psth_50.csv', header=None)
-VGS_broad = pd.read_csv(
-    './data/exp/Extracell_PSTH_pop_VGS_BS_PSTH_n_70_fit_1000_psth_50.csv')
-VGS_narrow = pd.read_csv(
-    './data/exp/Extracell_PSTH_pop_VGS_NS_PSTH_n_70_fit_1000_psth_50.csv')
+t = pd.read_csv('./data/exp/Extracell_PSTH_pop_T.csv', header=None)
+VGS_broad = pd.read_csv('./data/exp/Extracell_PSTH_pop_VGS_BS.csv')
+VGS_narrow = pd.read_csv('./data/exp/Extracell_PSTH_pop_VGS_NS.csv')
 
-df_offset = pd.read_csv(
-    './data/exp/Extracell_PSTH_pop_offset_PSTH_n_70_fit_1000_psth_50.csv')
-df_coeff = pd.read_csv(
-    './data/exp/Extracell_PSTH_pop_coeff_PSTH_n_70_fit_1000_psth_50.csv')
-df_tau = pd.read_csv(
-    './data/exp/Extracell_PSTH_pop_decay_PSTH_n_70_fit_1000_psth_50.csv')
-df_lat = pd.read_csv(
-    './data/exp/Extracell_PSTH_pop_latency_PSTH_n_70_fit_1000_psth_50.csv')
-df_lat = pd.read_csv(
-    './data/exp/Extracell_PSTH_pop_latency_PSTH_n_70_fit_1000_psth_50_sdf_5.csv')
-df_tmax = pd.read_csv(
-    './data/exp/Extracell_PSTH_pop_Tmax_PSTH_n_70_fit_1000_psth_50.csv')
+df_offset = pd.read_csv('./data/exp/Extracell_PSTH_pop_offset.csv')
+df_coeff = pd.read_csv('./data/exp/Extracell_PSTH_pop_coeff.csv')
+df_tau = pd.read_csv('./data/exp/Extracell_PSTH_pop_decay.csv')
+df_lat = pd.read_csv('./data/exp/Extracell_PSTH_pop_latency.csv')
+df_lat = pd.read_csv('./data/exp/Extracell_PSTH_pop_latency_sdf_5.csv')
+df_tmax = pd.read_csv('./data/exp/Extracell_PSTH_pop_Tmax.csv')
 
 
 ind = df_tmax <= 1000

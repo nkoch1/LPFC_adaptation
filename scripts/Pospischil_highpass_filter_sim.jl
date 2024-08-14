@@ -11,7 +11,7 @@ using DSP
 include(srcdir("Pospischil.jl"))
 
 #% Read in Patch Tau
-df = DataFrame(CSV.File(datadir("exp", "Summary_Decay_fit_250_psth_10.csv")))
+df = DataFrame(CSV.File(datadir("exp", "Summary_Decay.csv")))
 τ_Patch = -1 ./ (df[isnan.(df[!, "Patch NS"]).==0, "Patch NS"] / 1000)
 
 # read in Pospischil fits
@@ -153,7 +153,7 @@ end
 
 
 # save files
-fname = "Pospischil_highpass_filter_Inh_sim_I_$(I)_g_$(g)_gi_$(gsynI)_10"
+fname = "Pospischil_highpass_filter_Inh_sim"
 writedlm(datadir("sims", "$(fname)_tau.csv"), τ_VGS_I, ',')
 writedlm(datadir("sims", "$(fname)_coeff.csv"), coeff_VGS_I, ',')
 writedlm(datadir("sims", "$(fname)_offset.csv"), offset_VGS_I, ',')

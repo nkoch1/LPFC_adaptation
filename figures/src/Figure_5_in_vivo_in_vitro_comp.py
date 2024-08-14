@@ -16,13 +16,13 @@ from src.plt_fxns import remove_axis_box
 plt.rcParams["font.family"] = "Arial"
 
 # %% load data
-sdf_t_df = pd.read_csv('./data/exp/PSTH_t_array_10.csv', header=None)
+sdf_t_df = pd.read_csv('./data/exp/PSTH_t_array.csv', header=None)
 sdf_t = sdf_t_df[0].values
-VGS_broad = pd.read_csv('./data/exp/VGS_broad_psth_10.csv')
-VGS_narrow = pd.read_csv('./data/exp/VGS_narrow_psth_10.csv')
+VGS_broad = pd.read_csv('./data/exp/VGS_broad_psth.csv')
+VGS_narrow = pd.read_csv('./data/exp/VGS_narrow_psth.csv')
 df_patch = pd.read_csv('./data/exp/Patch_exp_decay_fit_NS_BS.csv')
 
-df = pd.read_csv('./data/exp/Summary_Decay_fit_250_psth_10.csv')
+df = pd.read_csv('./data/exp/Summary_Decay.csv')
 
 df_vgs_b = pd.DataFrame(columns=['decay $\tau$', 'condition'])
 df_vgs_b['decay $\tau$'] = np.log10(
@@ -47,7 +47,7 @@ df_patch_n['decay $\tau$'] = np.log10(
 df_patch_n['condition'] = "Patch NS"
 
 df_tau_pop = pd.read_csv(
-    './data/exp/Extracell_PSTH_pop_decay_PSTH_n_70_fit_1000_psth_50.csv')
+    './data/exp/Extracell_PSTH_pop_decay.csv')
 df_pop_n = pd.DataFrame(columns=['decay $\tau$', 'condition'])
 df_pop_n['decay $\tau$'] = np.log10(-1 / (df_tau_pop['VGS NS'] / 1000))
 df_pop_n['condition'] = "Pop NS"
@@ -65,9 +65,9 @@ posthoc_tau = scikit_posthocs.posthoc_dunn(
     df_sum, val_col='decay $\tau$', group_col='condition')
 
 df_offset_vivo = pd.read_csv(
-    './data/exp/extracell_offset_only_fit_250_psth_10.csv')
+    './data/exp/extracell_offset.csv')
 df_coeff_vivo = pd.read_csv(
-    './data/exp/extracell_coefficient_only_fit_250_psth_10.csv')
+    './data/exp/extracell_coefficient.csv')
 df_AI_vivo = df_offset_vivo / (df_offset_vivo + df_coeff_vivo)
 
 df_vgs_b_AI = pd.DataFrame(columns=['AI', 'condition'])
@@ -79,9 +79,9 @@ df_patch_b_AI['AI'] = df_patch["Patch BS AI"]
 df_patch_b_AI['condition'] = "Patch BS"
 
 df_pop_offset = pd.read_csv(
-    './data/exp/Extracell_PSTH_pop_offset_PSTH_n_70_fit_1000_psth_50.csv')
+    './data/exp/Extracell_PSTH_pop_offset.csv')
 df_pop_coeff = pd.read_csv(
-    './data/exp/Extracell_PSTH_pop_coeff_PSTH_n_70_fit_1000_psth_50.csv')
+    './data/exp/Extracell_PSTH_pop_coeff.csv')
 df_pop_AI = df_pop_offset / (df_pop_offset + df_pop_coeff)
 
 

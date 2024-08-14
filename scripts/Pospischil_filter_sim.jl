@@ -12,7 +12,7 @@ using DSP
 include(srcdir("Pospischil.jl"))
 
 #% Read in Patch Tau
-df = DataFrame(CSV.File(datadir("exp", "Summary_Decay_fit_250_psth_10.csv")))
+df = DataFrame(CSV.File(datadir("exp", "Summary_Decay.csv")))
 τ_Patch = -1 ./ (df[isnan.(df[!, "Patch NS"]).==0, "Patch NS"] / 1000)
 
 # read in Pospischil fits
@@ -202,10 +202,10 @@ plt.show()
 println(median(τ_VGS))
 
 # save files
-fname = "Pospischil_filter_sim_I_$(I)_g_$(g)_10.jld2"
+fname = "Pospischil_filter_sim.jld2"
 save(datadir("sims", fname), Dict("τ_VGS" => τ_VGS, "psth_VGS" => psth_VGS, "psth_t_VGS" => psth_t_VGS, "spike_raster_all" => spike_raster_all))
 
-fname = "Pospischil_filter_sim_I_$(I)_g_$(g)_10"
+fname = "Pospischil_filter_sim"
 writedlm(datadir("sims", "$(fname)_tau.csv"), τ_VGS, ',')
 writedlm(datadir("sims", "$(fname)_coeff.csv"), coeff_VGS, ',')
 writedlm(datadir("sims", "$(fname)_offset.csv"), offset_VGS, ',')
@@ -282,7 +282,7 @@ end
 plt.show()
 
 # save files
-fname = "Pospischil_filter_Inh_sim_I_$(I)_g_$(g)_gi_$(gsynI)_10"
+fname = "Pospischil_filter_Inh_sim"
 writedlm(datadir("sims", "$(fname)_tau.csv"), τ_VGS_I, ',')
 writedlm(datadir("sims", "$(fname)_coeff.csv"), coeff_VGS_I, ',')
 writedlm(datadir("sims", "$(fname)_offset.csv"), offset_VGS_I, ',')
@@ -298,7 +298,7 @@ println(median(AI_VGS_I))
 
 #% save summary files
 
-fname = "Pospischil_TAU_filter_Inh_sim_I_$(I)_g_$(g)_gi_$(gsynI)_10"
+fname = "Pospischil_TAU_filter_Inh_sim"
 df = DataFrame("τ_step" => log10.(τ_step), "τ_VGS" => log10.(τ_VGS), "τ_VGS_I" => log10.(τ_VGS_I))
 CSV.write(datadir("sims", "$(fname).csv"), df)
 

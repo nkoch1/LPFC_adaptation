@@ -22,13 +22,12 @@ step_tau = pd.read_csv("./data/sims/Pospischil_step_sim_tau.csv", header=None)
 step_F = pd.read_csv("./data/sims/Pospischil_step_sim_F.csv")
 step_t = pd.read_csv("./data/sims/Pospischil_step_sim_t.csv")
 
-ge = 4.  # 3.75
 VGS_tau = pd.read_csv(
-    "./data/sims/Pospischil_filter_OU_sim_E_0.032_I_0.1827_g_{}_tau.csv".format(ge), header=None)
+    "./data/sims/Pospischil_filter_OU_sim_tau.csv", header=None)
 VGS_psth = pd.read_csv(
-    "./data/sims/Pospischil_filter_OU_sim_E_0.032_I_0.1827_g_{}_psth_g_{}.csv".format(ge, ge))
+    "./data/sims/Pospischil_filter_OU_sim_psth.csv")
 VGS_psth_t = pd.read_csv(
-    "./data/sims/Pospischil_filter_OU_sim_E_0.032_I_0.1827_g_{}_psth_t_g_{}.csv".format(ge, ge))
+    "./data/sims/Pospischil_filter_OU_sim_psth_t.csv")
 VGS_psth_array = np.array(
     [np.array(literal_eval(VGS_psth.iloc[i, 0])) for i in range(VGS_psth.shape[0])])
 VGS_psth_t_array = np.array([np.array(literal_eval(
@@ -36,17 +35,17 @@ VGS_psth_t_array = np.array([np.array(literal_eval(
 
 
 VGS_sum = pd.read_csv(
-    "./data/sims/Pospischil_TAU_filter_OU_sim_E_0.032_I_0.1827_g_{}.csv".format(ge))
+    "./data/sims/Pospischil_TAU_filter_OU_sim.csv")
 VGS_sum.rename(columns={"τ_step": "Step", "τ_VGS": "BS"}, inplace=True)
 
 VGS_sum_AI = pd.read_csv(
-    "./data/sims/Pospischil_TAU_filter_OU_sim_E_0.032_I_0.1827_AI_g_{}.csv".format(ge))
+    "./data/sims/Pospischil_TAU_filter_OU_sim_AI.csv")
 VGS_sum_AI.rename(columns={"AI_step": "Step", "AI_VGS": "BS"}, inplace=True)
 
 t = pd.read_csv(
-    './data/exp/Extracell_PSTH_pop_PSTH_T_n_70_fit_1000_psth_50.csv', header=None)
+    './data/exp/Extracell_PSTH_pop_T.csv', header=None)
 VGS_narrow = pd.read_csv(
-    './data/exp/Extracell_PSTH_pop_VGS_NS_PSTH_n_70_fit_1000_psth_50.csv', header=None)
+    './data/exp/Extracell_PSTH_pop_VGS_NS.csv', header=None)
 
 
 df_Step = pd.DataFrame(columns=['decay $\tau$', 'condition'])
@@ -58,14 +57,14 @@ df_BS['decay $\tau$'] = VGS_sum['BS']
 df_BS['condition'] = "BS"
 
 
-df_vgs = pd.read_csv('./data/exp/Summary_Decay_fit_250_psth_10.csv')
+df_vgs = pd.read_csv('./data/exp/Summary_Decay.csv')
 df_vgs_n = pd.DataFrame(columns=['decay $\tau$', 'condition'])
 df_vgs_n['decay $\tau$'] = np.log10(
     -1 / (df_vgs.loc[df_vgs.index[~df_vgs["VGS NS"].isnull()], "VGS NS"] / 1000))
 df_vgs_n['condition'] = "NS"
 
 df_tau_pop = pd.read_csv(
-    './data/exp/Extracell_PSTH_pop_decay_PSTH_n_70_fit_1000_psth_50.csv')
+    './data/exp/Extracell_PSTH_pop_decay.csv')
 df_pop_n = pd.DataFrame(columns=['decay $\tau$', 'condition'])
 df_pop_n['decay $\tau$'] = np.log10(-1 / (df_tau_pop['VGS NS'] / 1000))
 df_pop_n['condition'] = "Pop NS"

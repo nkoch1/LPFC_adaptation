@@ -38,11 +38,11 @@ broad_ex_ind = df_extra_BS.index[df_extra_BS['UnitIDs'] == broadVivo][0]
 narrow_ex_ind = df_extra_NS.index[df_extra_NS['UnitIDs'] == narrowVivo][0]
 
 # summary data
-sdf_t = pd.read_csv('./data/exp/PSTH_t_array_10.csv', header=None)
-VGS_broad = pd.read_csv('./data/exp/VGS_broad_psth_10.csv')
-VGS_narrow = pd.read_csv('./data/exp/VGS_narrow_psth_10.csv')
+sdf_t = pd.read_csv('./data/exp/PSTH_t_array.csv', header=None)
+VGS_broad = pd.read_csv('./data/exp/VGS_broad_psth.csv')
+VGS_narrow = pd.read_csv('./data/exp/VGS_narrow_psth.csv')
 VGS_narrow = VGS_narrow.drop(columns=['B20171109_DChan042_2'])
-df = pd.read_csv('./data/exp/Summary_Decay_fit_250_psth_10.csv')
+df = pd.read_csv('./data/exp/Summary_Decay.csv')
 df_vgs_b = pd.DataFrame(columns=['decay $\tau$', 'condition'])
 df_vgs_b['decay $\tau$'] = np.log10(
     -1 / (df.loc[df.index[~df["VGS BS"].isnull()], "VGS BS"] / 1000))
@@ -54,10 +54,10 @@ df_vgs_n['decay $\tau$'] = np.log10(
 df_vgs_n['condition'] = "VGS NS"
 df_sum_tau = pd.concat([df_vgs_b, df_vgs_n], ignore_index=True)
 
-df_offset = pd.read_csv('./data/exp/extracell_offset_only_fit_250_psth_10.csv')
+df_offset = pd.read_csv('./data/exp/extracell_offset.csv')
 df_coeff = pd.read_csv(
-    './data/exp/extracell_coefficient_only_fit_250_psth_10.csv')
-df_tau = pd.read_csv('./data/exp/extracell_decay_only_fit_250_psth_10.csv')
+    './data/exp/extracell_coefficient.csv')
+df_tau = pd.read_csv('./data/exp/extracell_decay.csv')
 df_AI = df_offset / (df_offset + df_coeff)
 
 # latency

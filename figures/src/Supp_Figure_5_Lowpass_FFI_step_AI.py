@@ -22,7 +22,7 @@ I = 0.74
 g = 5.6
 gi = 2.45
 VGS_sum_AI = pd.read_csv(
-    "./data/sims/Pospischil_TAU_filter_Inh_sim_I_{}_g_{}_gi_{}_10_AI.csv".format(I, g, gi))
+    "./data/sims/Pospischil_TAU_filter_Inh_sim_AI.csv".format(I, g, gi))
 VGS_sum_AI.rename(columns={"AI_step": "Step",
                   "AI_VGS": "E", "AI_VGS_I": "E+I"}, inplace=True)
 
