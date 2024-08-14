@@ -1,6 +1,29 @@
-name = "LPFC_adaptation"
-[compat]
-julia = "1.10.0"
-DrWatson = "2.15.0"
+name = "dlPFC_SFA"
+authors = ["Nils A. Koch"]
+
 [deps]
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+DSP = "717857b8-e6f2-59f4-9121-6e50c889abd2"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
+DiffEqCallbacks = "459566f4-90b8-5000-8ac3-15dfb0a30def"
+DifferentialEquations = "0c46a032-eb83-5123-abaf-570d42b7fbaa"
 DrWatson = "634d3b9d-ee7a-5ddf-bec9-22491ea816e1"
+ImageFiltering = "6a3955dd-da59-5b1f-98d4-e7296123deb5"
+Interpolations = "a98d9a8b-a2ab-59e6-89dd-64a1c18fca59"
+JLD2 = "033835bb-8acc-5ee8-8aae-3f567f8a3819"
+LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
+LsqFit = "2fda8390-95c7-5789-9bda-21331edee243"
+NumericalIntegration = "e7bfaba1-d571-5449-8927-abc22e82249b"
+Optimization = "7f7a1694-90dd-40f0-9382-eb1efda571ba"
+OptimizationBBO = "3e6eede4-6085-4f62-9a71-46d9bc1eb92b"
+Peaks = "18e31ff7-3703-566c-8e60-38913d67486b"
+ProgressMeter = "92933f4c-e287-5a05-a399-4b506db050ca"
+PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
+PyPlot = "d330b81b-6aea-500a-939a-2ce795aea3ee"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
+
+[compat]
+DrWatson = "2.14.0"
+julia = "1.10.1"
