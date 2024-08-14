@@ -3,6 +3,7 @@ using DrWatson, Test
 
 # Here you include files using `srcdir`
 # include(srcdir("file.jl"))
+include(srcdir("Pospischil.jl"))
 
 # Run test suite
 println("Starting tests")
