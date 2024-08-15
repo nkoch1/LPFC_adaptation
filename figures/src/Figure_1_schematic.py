@@ -80,6 +80,7 @@ ax_vivo.eventplot(VGS_NS_spikes, color='k', linewidths=1)
 ax_vivo.set_xlabel('Time (ms)')
 ax_vivo = remove_axis_box(ax_vivo, ["top", "left", "right"])
 ax_vivo.set_xlim(-100, 1000)
+ax_vivo.set_title('Raster Plot', size=8)
 
 ###### example in vitro trace #####
 
@@ -125,7 +126,7 @@ ax_vitro_step.set_ylim(-25, 100)
 
 ax_vitro_step = remove_axis_box(ax_vitro_step, ["top", "left", "bottom", "right"])
 ax_vitro_step.set_xlabel('Time (ms)')
-
+ax_vitro_NS.set_title('Spike Train', size=8)
 ##### save and show #####
 plt.savefig('./figures/Figure_1_schematic.png', bbox_inches='tight', dpi=300)
 plt.savefig('./figures/Figure_1_schematic.pdf', bbox_inches='tight', dpi=300)

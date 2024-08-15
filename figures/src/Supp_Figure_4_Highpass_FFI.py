@@ -16,9 +16,6 @@ from src.plt_fxns import lighten_color, remove_axis_box, circuit_dia_HP
 plt.rcParams["font.family"] = "Arial"
 # %% load data
 
-I = 0.74
-g = 5.6
-gsynI = 2.45
 VGS_I_psth = pd.read_csv(
     "./data/sims/Pospischil_highpass_filter_Inh_sim_psth_0_1.csv")
 VGS_I_psth_t = pd.read_csv(
@@ -214,7 +211,7 @@ ax_VGS_sum.set_xticks(ax_VGS_sum.get_xticks())
 ax_VGS_sum.set_xticklabels(
     ax_VGS_sum.get_xticklabels(), rotation=0, ha='center')
 ax_VGS_sum.yaxis.set_major_formatter(ticker.FormatStrFormatter("10$^{%d}$"))
-ax_VGS_sum.set_ylabel("Decay $\\tau$ (ms)")
+ax_VGS_sum.set_ylabel("SFA $\\tau$ (ms)")
 ax_VGS_sum.set_xlabel("Highpass Cutoff (Hz)", ha='center', x=0.625, labelpad=3)
 ymin, ymax = ax_VGS_sum.get_ylim()
 ax_VGS_sum.yaxis.set_ticks([1,2,3,4,5])

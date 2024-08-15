@@ -234,7 +234,7 @@ sns.boxplot(data=np.log10(-1 / (df_tau[['VGS BS', 'VGS NS']]/1000)), ax=ax_tau, 
             boxprops=dict(alpha=.5), showfliers=False)
 sns.stripplot(data=np.log10(-1 / (df_tau[['VGS BS', 'VGS NS']]/1000)),
               ax=ax_tau, order=order_e, palette=palette_e, s=ms)
-ax_tau.set_ylabel("ESFA $\\tau$ (ms)")
+ax_tau.set_ylabel("E-SFA $\\tau$ (ms)")
 ax_tau.set_xticks(ax_tau.get_xticks())
 ax_tau.set_xticklabels(ax_tau.get_xticklabels(), rotation=0, ha='center')
 ymin, ymax = ax_tau.get_ylim()
@@ -400,5 +400,3 @@ plt.savefig('./figures/Figure_3_in_vivo_pop_adaptation.png',
 plt.savefig('./figures/Figure_3_in_vivo_pop_adaptation.pdf',
             bbox_inches='tight', dpi=300)
 plt.show()
-
-# %%

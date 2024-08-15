@@ -226,13 +226,13 @@ sat = np.linspace(0.75, 1.5, patch_BS['patch_BS'].shape[0])
 for i in range(patch_BS['patch_BS'].shape[0]):
     ax_BS_VGS_P.plot(patch_BS['patch_BS'][i, 0] * 1000, patch_BS['patch_BS']
                      [i, 1], color=lighten_color(col[0], sat[i]), alpha=0.5)
-ax_BS_VGS_P.set_ylabel("F (Hz)")
+ax_BS_VGS_P.set_ylabel("Freq. (Hz)")
 
 sat = np.linspace(0.75, 1.5, patch_BS['patch_BS'].shape[0])
 for i in range(patch_BS['patch_BS'].shape[0]):
     ax_BS_VGS_P_n.plot(patch_BS['patch_BS'][i, 0] * 1000, patch_BS['patch_BS'][i, 1] / np.max(
         patch_BS['patch_BS'][i, 1]), color=lighten_color(col[0], sat[i]), alpha=0.5)
-ax_BS_VGS_P_n.set_ylabel("Norm F")
+ax_BS_VGS_P_n.set_ylabel("Norm\nFreq.")
 
 
 ax_BS_VGS_Ex.plot((np.array(Pyr_ex_df.loc[Pyr_ex_ind, 't'].values[0]) - Pyr_ex_df.loc[Pyr_ex_ind, 't'].values[0][0] - spike_times_Pyr[0]) * 1000,
@@ -244,13 +244,13 @@ sat = np.linspace(0.95, 1.25, patch_NS['patch_NS'].shape[0])
 for i in range(patch_NS['patch_NS'].shape[0]):
     ax_NS_VGS_P.plot(patch_NS['patch_NS'][i, 0] * 1000, patch_NS['patch_NS']
                      [i, 1], color=lighten_color(col[1], sat[i]), alpha=0.5)
-ax_NS_VGS_P.set_ylabel("F (Hz)")
+ax_NS_VGS_P.set_ylabel("Freq. (Hz)")
 
 sat = np.linspace(0.95, 1.25, patch_NS['patch_NS'].shape[0])
 for i in range(patch_NS['patch_NS'].shape[0]):
     ax_NS_VGS_P_n.plot(patch_NS['patch_NS'][i, 0] * 1000, patch_NS['patch_NS'][i, 1] / np.max(
         patch_NS['patch_NS'][i, 1]), color=lighten_color(col[1], sat[i]), alpha=0.5)
-ax_NS_VGS_P_n.set_ylabel("Norm F")
+ax_NS_VGS_P_n.set_ylabel("Norm\nFreq.")
 
 ax_NS_VGS_Ex.plot((np.array(FS_ex_df.loc[FS_ex_ind, 't'].values[0]) - FS_ex_df.loc[FS_ex_ind, 't'].values[0][0] - spike_times_FS[0]) * 1000,
                   FS_ex_df.loc[FS_ex_ind, 'V'].values[0], color=col[1])
@@ -324,7 +324,7 @@ tick_range_ticks = np.append([0.5], tick_range[:-1])
 ax_q_tau.yaxis.set_ticks([np.log10(x) for p in [0,1,2,3,4] for x in np.linspace(
     10 ** p, 10 ** (p + 1), 10)], minor=True)
 ax_q_tau.yaxis.set_ticklabels(['$10^{%s}$' % (round(i)) for i in tick_range])
-ax_q_tau.set_ylabel('ISFA $\\tau$ (ms)')
+ax_q_tau.set_ylabel('I-SFA $\\tau$ (ms)')
 annotator = Annotator(ax_q_tau, pairs1, data=df_tau,
                       x='condition',  y='decay $\tau$')
 annotator.configure(test='Mann-Whitney', loc='inside', fontsize=9,

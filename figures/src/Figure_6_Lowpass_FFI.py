@@ -195,9 +195,6 @@ mut_scale_arrow = 10
 
 ##### Layout #####
 fig = plt.figure(figsize=(6.5, 8))
-# gs = fig.add_gridspec(4, 3, left=0.1, right=0.95, top=0.95, bottom=0.075, width_ratios=[1, 1.5, 1.5],
-#                       height_ratios=[0.55, 0.55, 0.75, 1.85],
-#                       hspace=0.65,  wspace=0.75)
 gs = fig.add_gridspec(4, 3, left=0.1, right=0.95, top=0.95, bottom=0.075, width_ratios=[1, 1.5, 1.5],
                       height_ratios=[0.575, 0.575, 0.75, 1.8],
                       hspace=0.65,  wspace=0.75)
@@ -208,7 +205,7 @@ gs_r = gridspec.GridSpecFromSubplotSpec(
 gs_b0 = gridspec.GridSpecFromSubplotSpec(
     1, 2, wspace=0.45, hspace=0.75, subplot_spec=gs[2, :])
 gs_b = gridspec.GridSpecFromSubplotSpec(2, 4, wspace=0.15, width_ratios=[
-                                        0.025, 0.7, 0.01, 0.95], hspace=0.95, subplot_spec=gs[3, :])
+                                        0.0375, 0.85, 0.05, 0.85], hspace=0.95, subplot_spec=gs[3, :])
 ax_dia = fig.add_subplot(gs_l[0, 0])
 ax_VGS_BS = fig.add_subplot(gs_l[0, 1])
 ax_dia2 = fig.add_subplot(gs_l[1, 0])
@@ -221,9 +218,7 @@ ax_data_comp = fig.add_subplot(gs_b0[0])
 ax_data_AI_comp = fig.add_subplot(gs_b0[1])
 
 # schematic layout
-gs_schem = gridspec.GridSpecFromSubplotSpec(
-    3, 3,  hspace=0.75,  wspace=0.75, subplot_spec=gs_b[:, 3])
-ax_input = fig.add_subplot(gs_schem[2, 1])
+gs_schem = gridspec.GridSpecFromSubplotSpec(2, 3,  hspace=0.5,  wspace=0.75, subplot_spec=gs_b[:, 3])
 ax_I_fast = fig.add_subplot(gs_schem[1, 0])
 ax_I_med = fig.add_subplot(gs_schem[1, 1])
 ax_I_slow = fig.add_subplot(gs_schem[1, 2])
@@ -349,6 +344,7 @@ axHistx_max.xaxis.set_major_formatter(ticker.FormatStrFormatter("10$^{%d}$"))
 axHistx_max.xaxis.set_ticks([np.log10(x) for p in [0,1,2,3,4] for x in np.linspace(
     10 ** p, 10 ** (p + 1), 10)], minor=True)
 ax_amp_comp.tick_params(axis="x", which="both", length=0.)
+
 ##### decay tau boxplots #####
 cond = VGS_sum.columns.tolist()
 order_e = cond
@@ -361,14 +357,10 @@ ax_VGS_sum.set_xticklabels(
     ax_VGS_sum.get_xticklabels(), rotation=0, ha='center')
 ax_VGS_sum.set_yticks([1, 2, 3, 4, 5])
 ymin, ymax = ax_VGS_sum.get_ylim()
-# tick_range = np.arange(np.ceil(ymin), np.ceil(ymax)+1, 1)
-# ax_VGS_sum.yaxis.set_ticks(tick_range)
-# tick_range_ticks = np.append([0.5], tick_range[:-1])
 ax_VGS_sum.yaxis.set_ticks([np.log10(x) for p in [1,2,3,4,5] for x in np.linspace(
     10 ** p, 10 ** (p + 1), 10)], minor=True)
-# ax_VGS_sum.yaxis.set_ticklabels(['$10^{1}$', '', '$10^{3}$', '', '$10^{5}$'])
 ax_VGS_sum.yaxis.set_major_formatter(ticker.FormatStrFormatter("10$^{%d}$"))
-ax_VGS_sum.set_ylabel("Decay $\\tau$ (ms)")
+ax_VGS_sum.set_ylabel("SFA $\\tau$ (ms)")
 pairs1 = [(cond[0], cond[1]), (cond[0], cond[2]), (cond[1], cond[2]),]
 pvalues = []
 for pair in pairs1:
@@ -435,12 +427,8 @@ ax_data_comp.set_xticklabels(
 ax_data_comp.set_yticks([1, 2, 3])
 ymin, ymax = ax_data_comp.get_ylim()
 tick_range = np.arange(np.ceil(ymin), np.ceil(ymax)+1, 1)
-# ax_data_comp.yaxis.set_ticks(tick_range)
-# tick_range_ticks = np.append([0.5], tick_range[:-1])
 ax_data_comp.yaxis.set_ticks([np.log10(x) for p in [1,2,3] for x in np.linspace(
     10 ** p, 10 ** (p + 1), 10)], minor=True)
-# ax_data_comp.yaxis.set_ticklabels(
-#     ['$10^{%s}$' % (round(i)) for i in [1]])
 
 ax_data_comp.yaxis.set_major_formatter(ticker.FormatStrFormatter("10$^{%d}$"))
 pairs2 = [(order_NS[0], order_NS[2]), (order_NS[0], order_NS[3]),
@@ -456,13 +444,10 @@ annotator.configure(test=None, test_short_name="", loc='inside',
                     fontsize=8, show_test_name=False, pvalue_thresholds=pval_thresh)
 annotator.set_pvalues(pvalues=pvalues)
 annotator.annotate()
-# ax_data_comp.set_ylim(ymin, 5.75)
 ax_data_comp.set_ylim(ymin, 5.)
 ax_data_comp.set_xticklabels(data_labels)
 
 # hide y-axis for stats region
-# ystart = 4.05
-# yend = 5.150
 ystart = 3.4
 yend = 5.150
 ax_data_comp.add_patch(patches.Rectangle((-0.6, ystart), 0.2, yend, fill=True, color="white",
@@ -482,80 +467,68 @@ ax_data_AI_comp.set_xticklabels(data_labels)
 t = np.linspace(0, 500)
 tau_fast = 10
 tau_med = 100
-tau_slow = 1000
+tau_slow = 2000
 tau1 = 20
 tau2 = 120
-
-# plot input
-ax_input.plot(t, (1 - np.exp(-(t) / tau1)) * (np.exp(-(t) / tau2)), color='k')
-ax_input.set_xlabel('NS Input')
-ax_input.set_xlim(-10, 500)
-
-
-# add arrows
-xyAtop2 = [0., 1.1]
-xyBtop2 = [1.1, -0.1]
-arrow_top2 = patches.ConnectionPatch(xyAtop2, xyBtop2, coordsA=ax_input.transAxes, coordsB=ax_I_fast.transAxes,
-                                     color='k', arrowstyle="-|>", mutation_scale=mut_scale_arrow, linewidth=2,)
-fig.patches.append(arrow_top2)
-
-xyAtop2 = [0.5, 1.1]
-xyBtop2 = [0.5, -0.1]
-arrow_top2 = patches.ConnectionPatch(xyAtop2, xyBtop2, coordsA=ax_input.transAxes, coordsB=ax_I_med.transAxes,
-                                     color='k', arrowstyle="-|>", mutation_scale=mut_scale_arrow, linewidth=2,)
-fig.patches.append(arrow_top2)
-
-xyAtop2 = [1., 1.1]
-xyBtop2 = [-0.1, -0.1]
-arrow_top2 = patches.ConnectionPatch(xyAtop2, xyBtop2, coordsA=ax_input.transAxes, coordsB=ax_I_slow.transAxes,
-                                     color='k', arrowstyle="-|>", mutation_scale=mut_scale_arrow, linewidth=2,)
-fig.patches.append(arrow_top2)
-
-xyAtop2 = [0.5, 1.1]
-xyBtop2 = [0.5, -0.1]
-arrow_top2 = patches.ConnectionPatch(xyAtop2, xyBtop2, coordsA=ax_I_fast.transAxes, coordsB=ax_I_fast_out.transAxes,
-                                     color='k', arrowstyle="-|>", mutation_scale=mut_scale_arrow, linewidth=2,)
-fig.patches.append(arrow_top2)
-
-arrow_top2 = patches.ConnectionPatch(xyAtop2, xyBtop2, coordsA=ax_I_med.transAxes, coordsB=ax_I_med_out.transAxes,
-                                     color='k', arrowstyle="-|>", mutation_scale=mut_scale_arrow, linewidth=2,)
-fig.patches.append(arrow_top2)
-
-arrow_top2 = patches.ConnectionPatch(xyAtop2, xyBtop2, coordsA=ax_I_slow.transAxes, coordsB=ax_I_slow_out.transAxes,
-                                     color='k', arrowstyle="-|>", mutation_scale=mut_scale_arrow, linewidth=2,)
-fig.patches.append(arrow_top2)
 
 
 # plot I-SFA
 ax_I_fast.plot(t, np.exp(-t/tau_fast),
                color=lighten_color(c_step, amount=1.05))
-ax_I_fast.text(100, 0.35, '  Fast', color=lighten_color(c_step, amount=1.05))
+ax_I_fast.text(100, 0.5, '  Fast', color=lighten_color(c_step, amount=1.05))
 ax_I_fast.set_ylabel('I-SFA', color=c_step)
 ax_I_med.plot(t, np.exp(-t/tau_med), color=lighten_color(c_step, amount=0.9))
 ax_I_med.text(120, 0.4, '  Inter-\nmediate',
               color=lighten_color(c_step, amount=0.9))
 ax_I_slow.plot(t,  np.exp(-t/tau_slow),
                color=lighten_color(c_step, amount=0.75))
-ax_I_slow.text(50, 0.45, '  Slow', color=lighten_color(c_step, amount=0.75))
+ax_I_slow.text(50, 0.5, '  Slow', color=lighten_color(c_step, amount=0.75))
 
 
 # plot E-SFA
 tau1_fast = 20
-tau2_fast = 120
-ax_I_fast_out.plot(t, 0.525*(1 - np.exp(-(t) / tau1_fast)) *
-                   (np.exp(-(t) / tau2_fast)), color=lighten_color(c_EI, amount=0.75))
+tau2_fast = 100
+y_fast = 0.55*(1 - np.exp(-(t) / tau1_fast)) * (np.exp(-(t) / tau2_fast))
+y_fast_ind = np.argmax(y_fast)
+y_fast_max = np.max(y_fast)
+ax_I_fast_out.plot(t, y_fast, 
+                   color=lighten_color(c_EI, amount=0.75))
 ax_I_fast_out.set_ylabel('E-SFA', color=c_EI)
 ax_I_fast_out.xaxis.set_label_position('top')
 
 tau1_med = 20
 tau2_med = 20
-ax_I_med_out.plot(t, 2.625*(1 - np.exp(-(t) / tau1_med)) *
-                  (np.exp(-(t) / tau2_med)), color=lighten_color(c_EI, amount=1))
+y_med = 2.625*(1 - np.exp(-(t) / tau1_med)) * (np.exp(-(t) / tau2_med))
+y_med_ind = np.argmax(y_med)
+y_med_max = np.max(y_med)
+ax_I_med_out.plot(t, y_med, color=lighten_color(c_EI, amount=1))
 
 tau1_slow = 20
-tau2_slow = 120
-ax_I_slow_out.plot(t, 1.25 * (1 - np.exp(-(t) / tau1_slow)) *
-                   (np.exp(-(t) / tau2_slow)), color=lighten_color(c_EI, amount=1.25))
+tau2_slow = 125
+y_slow = 1.3 * (1 - np.exp(-(t) / tau1_slow)) * (np.exp(-(t) / tau2_slow))
+y_slow_ind = np.argmax(y_slow)
+y_slow_max = np.max(y_slow)
+ax_I_slow_out.plot(t, y_slow, color=lighten_color(c_EI, amount=1.25))
+
+
+# add lines
+xyAtop1 = [t[y_fast_ind], 0.]
+xyBtop1 = [t[y_fast_ind], y_fast_max]
+arrow_top1 = patches.ConnectionPatch(xyAtop1, xyBtop1, coordsA=ax_I_fast.transData, coordsB=ax_I_fast_out.transData,
+                                     color=lighten_color(c_EI, amount=0.75), alpha=0.75,  linestyle=':', mutation_scale=0, linewidth=1)
+fig.patches.append(arrow_top1)
+
+xyAtop2 = [t[y_med_ind+1], 0.]
+xyBtop2 = [t[y_med_ind+1], y_med_max]
+arrow_top2 = patches.ConnectionPatch(xyAtop2, xyBtop2, coordsA=ax_I_med.transData, coordsB=ax_I_med_out.transData,
+                                     color=lighten_color(c_EI, amount=1), alpha=0.75,  linestyle=':', mutation_scale=0, linewidth=1)
+fig.patches.append(arrow_top2)
+
+xyAtop3 = [t[y_slow_ind], 0.]
+xyBtop3 = [t[y_slow_ind], y_slow_max]
+arrow_top3 = patches.ConnectionPatch(xyAtop3, xyBtop3, coordsA=ax_I_slow.transData, coordsB=ax_I_slow_out.transData,
+                                     color=lighten_color(c_EI, amount=1.25),  alpha=0.75, linestyle=':', mutation_scale=0, linewidth=1)
+fig.patches.append(arrow_top3)
 
 
 #####  remove axis side, add axis limits and labels #####
@@ -568,7 +541,7 @@ for ax in [ax_dia, ax_dia2, ax_VGS_BS, ax_VGS_BS_I, ax_VGS_sum, ax_tau_comp, ax_
     ax = remove_axis_box(ax, ["right", "top"])
 
 for ax in [ax_I_fast, ax_I_med, ax_I_slow]:
-    ax.set_xlim(-7.5, 500)
+    ax.set_xlim(-7.5, 400)
     ax.set_ylim(-0.05, 1.02)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
@@ -579,7 +552,7 @@ for ax in [ax_I_fast, ax_I_med, ax_I_slow]:
 
 
 for ax in [ax_I_fast_out, ax_I_med_out, ax_I_slow_out]:
-    ax.set_xlim(-7.5, 500)
+    ax.set_xlim(-7.5, 400)
     ax.set_ylim(-0.05, 0.85)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
@@ -601,12 +574,6 @@ ax_tau_comp.spines["right"].set_visible(False)
 ax_tau_comp.spines["bottom"].set_visible(False)
 ax_tau_comp.set_ylim(45, 130)
 ax_tau_comp.set_xlim(0.5, 5.)
-ax_input.spines["top"].set_visible(False)
-ax_input.spines["right"].set_visible(False)
-ax_input.spines["bottom"].set_visible(False)
-ax_input.spines["left"].set_visible(False)
-ax_input.set_xticks([])
-ax_input.set_yticks([])
 axHistx_max.spines["right"].set_visible(False)
 axHistx_max.spines["top"].set_visible(False)
 axHistx_max.spines["left"].set_visible(False)
@@ -620,24 +587,15 @@ ax_VGS_BS_I.set_yticks([0, 20, 40])
 
 
 ##### subplot letters #####
-ax_dia.text(-0.05, 1.075, string.ascii_uppercase[0],
-            transform=ax_dia.transAxes, size=12, weight='bold')
-ax_dia2.text(-0.05, 1.1, string.ascii_uppercase[1],
-             transform=ax_dia2.transAxes, size=12, weight='bold')
-ax_VGS_sum.text(-0.05, 1.1, string.ascii_uppercase[2],
-                transform=ax_VGS_sum.transAxes, size=12, weight='bold')
-ax_VGS_AI.text(-0.05, 1.075, string.ascii_uppercase[3],
-               transform=ax_VGS_AI.transAxes, size=12, weight='bold')
-ax_data_comp.text(-0.025, 1.1, string.ascii_uppercase[4],
-                  transform=ax_data_comp.transAxes, size=12, weight='bold')
-ax_data_AI_comp.text(-0.025, 1.1, string.ascii_uppercase[5],
-                     transform=ax_data_AI_comp.transAxes, size=12, weight='bold')
-ax_tau_comp.text(-0.19, 1.175, string.ascii_uppercase[6],
-                 transform=ax_tau_comp.transAxes, size=12, weight='bold')
-ax_amp_comp.text(-0.025, 1.2, string.ascii_uppercase[7],
-                 transform=ax_amp_comp.transAxes, size=12, weight='bold')
-ax_I_fast_out.text(-0.25, 1.15, string.ascii_uppercase[8],
-                   transform=ax_I_fast_out.transAxes, size=12, weight='bold')
+ax_dia.text(-0.05, 1.075, string.ascii_uppercase[0], transform=ax_dia.transAxes, size=12, weight='bold')
+ax_dia2.text(-0.05, 1.1, string.ascii_uppercase[1],transform=ax_dia2.transAxes, size=12, weight='bold')
+ax_VGS_sum.text(-0.05, 1.1, string.ascii_uppercase[2], transform=ax_VGS_sum.transAxes, size=12, weight='bold')
+ax_VGS_AI.text(-0.05, 1.075, string.ascii_uppercase[3],transform=ax_VGS_AI.transAxes, size=12, weight='bold')
+ax_data_comp.text(-0.025, 1.1, string.ascii_uppercase[4], transform=ax_data_comp.transAxes, size=12, weight='bold')
+ax_data_AI_comp.text(-0.025, 1.1, string.ascii_uppercase[5], transform=ax_data_AI_comp.transAxes, size=12, weight='bold')
+ax_tau_comp.text(-0.19, 1.175, string.ascii_uppercase[6], transform=ax_tau_comp.transAxes, size=12, weight='bold')
+ax_amp_comp.text(-0.025, 1.2, string.ascii_uppercase[7], transform=ax_amp_comp.transAxes, size=12, weight='bold')
+ax_I_fast_out.text(-0.25, 1.075, string.ascii_uppercase[8], transform=ax_I_fast_out.transAxes, size=12, weight='bold')
 
 ##### save and show #####
 plt.savefig('./figures/Figure_6_Lowpass_FFI.png', dpi=300)

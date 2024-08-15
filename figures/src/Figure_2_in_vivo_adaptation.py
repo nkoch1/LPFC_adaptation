@@ -129,7 +129,7 @@ fig = plt.figure(figsize=(6.5, 8))
 gs = fig.add_gridspec(3, 1, height_ratios=[
                       1.1, 0.375, 0.375], hspace=0.5,  wspace=0.5)
 gs_ex = gridspec.GridSpecFromSubplotSpec(
-    2, 4, height_ratios=[0.7, 1.9], wspace=0.7, hspace=0.8, subplot_spec=gs[0])
+    2, 4, height_ratios=[0.7, 1.9], wspace=1.0, hspace=0.8, subplot_spec=gs[0])
 gs_bottom = gridspec.GridSpecFromSubplotSpec(
     1, 4, wspace=0.75, hspace=0.7, subplot_spec=gs[1])
 gs_bottom2 = gridspec.GridSpecFromSubplotSpec(
@@ -266,7 +266,7 @@ for i in range(VGS_broad.shape[1]):
                      alpha=alpha, color=lighten_color(palette_e[0], sat[i]))
 ax_BS_VGS_P.plot(sdf_t[0], VGS_broad[broad_ex_cell],
                  color=palette_e[0], linewidth=lw)
-ax_BS_VGS_P.set_ylabel('F (Hz)')
+ax_BS_VGS_P.set_ylabel('Freq.\n(Hz)')
 
 BS_cell_ind = np.argwhere(VGS_broad.columns == broad_ex_cell)[0][0]
 t_shift_ex = sdf_t[0][np.argmax(VGS_broad[broad_ex_cell])]
@@ -286,7 +286,7 @@ for i in range(VGS_broad.shape[1]):
 ax_BS_VGS_P_n.plot(sdf_t[0] - t_shift_ex, VGS_broad[broad_ex_cell] /
                    np.max(VGS_broad[broad_ex_cell]), color=palette_e[0], linewidth=lw)
 ax_BS_VGS_P_n.set_xlabel('Time (ms)')
-ax_BS_VGS_P_n.set_ylabel('Norm F')
+ax_BS_VGS_P_n.set_ylabel('Norm\nFreq.')
 ax_BS_VGS_P_n.set_ylim(0, 1)
 ax_BS_VGS_P_n.set_xticks(xticks_psth_n)
 ax_BS_VGS_P_n.set_xticklabels(xtick_labels_psth_n)
@@ -311,7 +311,7 @@ for i in range(VGS_narrow.shape[1]):
     ax_NS_VGS_P.plot(sdf_t[0], VGS_narrow.iloc[:, i],
                      alpha=alpha, color=lighten_color(palette_e[1], sat[i]))
 ax_NS_VGS_P.plot(sdf_t[0], VGS_narrow[narrow_ex_cell], color=palette_e[1])
-ax_NS_VGS_P.set_ylabel('F (Hz)', fontsize=10)
+ax_NS_VGS_P.set_ylabel('Freq.\n(Hz)', fontsize=10)
 
 
 NS_cell_ind = np.argwhere(VGS_narrow.columns == narrow_ex_cell)[0][0]
@@ -334,7 +334,7 @@ for i in range(VGS_narrow.shape[1]):
 ax_NS_VGS_P_n.plot(sdf_t[0] - t_shift_ex_NS, VGS_narrow[narrow_ex_cell] /
                    np.max(VGS_narrow[narrow_ex_cell]), color=palette_e[1])
 ax_NS_VGS_P_n.set_xlabel('Time (ms)')
-ax_NS_VGS_P_n.set_ylabel('Norm F', fontsize=10)
+ax_NS_VGS_P_n.set_ylabel('Norm\nFreq.', fontsize=10)
 ax_NS_VGS_P_n.set_ylim(0, 1)
 ax_NS_VGS_P_n.set_xticks(xticks_psth_n)
 ax_NS_VGS_P_n.set_xticklabels(xtick_labels_psth_n)
@@ -410,7 +410,7 @@ sns.boxplot(data=np.log10(-1 / (df_tau[['VGS BS', 'VGS NS']]/1000)), ax=ax_tau, 
             boxprops=dict(alpha=.5), showfliers=False)
 sns.stripplot(data=np.log10(-1 / (df_tau[['VGS BS', 'VGS NS']]/1000)),
               ax=ax_tau, order=order_e, palette=palette_e, s=ms)
-ax_tau.set_ylabel("ISFA $\\tau$ (ms)")
+ax_tau.set_ylabel("E-SFA $\\tau$ (ms)")
 ax_tau.spines["right"].set_visible(False)
 ax_tau.spines["top"].set_visible(False)
 ax_tau.set_xticks(ax_tau.get_xticks())

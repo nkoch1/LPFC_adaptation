@@ -132,7 +132,7 @@ ax_tau_comp.yaxis.set_ticks(tick_range)
 tick_range_ticks = np.append([0.], tick_range[:-1])
 ax_tau_comp.yaxis.set_ticks([np.log10(x) for p in tick_range_ticks for x in np.linspace(
     10 ** p, 10 ** (p + 1), 10)], minor=True)
-ax_tau_comp.set_ylabel("Decay $\\tau$ (ms)")
+ax_tau_comp.set_ylabel("SFA $\\tau$ (ms)")
 pairs1 = [(cond[0], cond[1]),]
 pvalues = []
 for pair in pairs1:
@@ -197,6 +197,6 @@ ax_data_comp.text(-0.025, 1.075, string.ascii_uppercase[2],
 ##### save and show #####
 plt.savefig('./figures/Supp_Figure_3_syn_bombard.png',
             bbox_inches='tight', dpi=300)
-# plt.savefig('./figures/Supp_Figure_3_syn_bombard.pdf',
-#             bbox_inches='tight', dpi=300)
+plt.savefig('./figures/Supp_Figure_3_syn_bombard.pdf',
+            bbox_inches='tight', dpi=300)
 plt.show()

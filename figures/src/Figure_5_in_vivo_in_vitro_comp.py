@@ -285,4 +285,3 @@ plt.savefig('./figures/Figure_5_in_vivo_in_vitro_comp.pdf',
             bbox_inches='tight', dpi=300)
 plt.show()
 
-# %%
