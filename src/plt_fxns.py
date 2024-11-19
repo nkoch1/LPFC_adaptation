@@ -99,200 +99,6 @@ def exp_curve(t, a, b, tau):
     """
     return a*np.exp(t*tau) + b
 
-
-def circuit_dia_LP(ax, inhib=True, ylim=(0, 2.5), lw_c=4, lw_con=3,  c_E="tab:green", c_M="tab:blue", c_I="tab:grey", lw_sdf=0.5, lw_f=2, fs_labels=10, fs_eqn=8, fs_axis=5):
-    """ Low-Pass circuit diagram
-    Args:
-        ax: axes to plot diagram in 
-        inhib: plot inhibition (Bool)
-        ylim: axis ylim
-        lw_c: FFI line width
-        lw_con: connection line width
-        c_E: color for exictatory input
-        c_M: color for mixed input
-        c_I: color for inhibition
-        lw_sdf: SDF line width
-        lw_f: filter line width
-        fs_labels: label font size
-        fs_eqn: equation font size
-        fs_axis: aixe font size
-    Returns:
-        ax with diagram
-    """
-    E_rect = patches.Rectangle((0, 1.25), 1.5, 1, linewidth=lw_con, clip_on=False,
-                               edgecolor=c_E, facecolor='none', linestyle="-", zorder=10)
-    ax.add_patch(E_rect)
-
-    M_rect = patches.Rectangle((2.75, 1.25), 1.5, 1, linewidth=lw_c, clip_on=False,
-                               edgecolor=c_M, facecolor='none', linestyle="-", zorder=10)
-    ax.add_patch(M_rect)
-
-    # add excitatory connection
-    ax.arrow(1.5, 1.75, 0.9, 0., linewidth=lw_con, color=c_E,
-             linestyle="-", head_width=0.15, head_length=-0.2)
-
-    # plot E SDF
-    ax_E_in = ax.inset_axes([0.25, 1.325, 1, 0.5],
-                            transform=ax.transData)  # x, y, width, height
-    ax_E_in.set_title("SDF", fontsize=fs_axis, pad=-
-                      10, color=c_E, weight="bold")
-    VGS = pd.read_csv("./data/exp/VGS_BS_SDF_groups_sel_n_70.csv")
-    sat_VGS = np.linspace(0.25, 1.35, VGS.shape[1])
-    sdf_t = np.arange(VGS.shape[0])
-    for i in range(0, VGS.shape[1]):
-        ax_E_in.plot(sdf_t, VGS.iloc[:, i], linewidth=lw_sdf, alpha=0.25, color=lighten_color(
-            c_E, sat_VGS[i]))  # color=c_E) #,
-    ax_E_in.set_xlim(0, 250000)
-    ax_E_in.spines["right"].set_visible(False)
-    ax_E_in.spines["top"].set_visible(False)
-    ax_E_in.spines["left"].set_visible(False)
-    ax_E_in.spines["bottom"].set_visible(False)
-    ax_E_in.set_xticks([])
-    ax_E_in.set_yticks([])
-
-    # add text
-    ax.text(3.5, 2.6, "NS Model", fontsize=fs_labels,
-            color=c_M, ha="center", va="center", weight="bold")
-    ax.text(3.5, 1.75, "$\sum$ I", fontsize=fs_eqn, color=c_M,
-            weight="bold", ha="center", va="center")
-
-    if inhib:
-        ax.arrow(2, 1.75, 0, -0.575, linewidth=lw_con, color=c_E,
-                 linestyle="-", head_width=0.225, head_length=-0.15)
-
-        I_rect = patches.Rectangle((1.25, 0), 1.5, 1, linewidth=lw_con, clip_on=False,
-                                   edgecolor=c_I, facecolor='none', linestyle="-", zorder=10)
-        ax.add_patch(I_rect)
-
-        ax.arrow(2.75, 0.5, 0.8, 0, linewidth=lw_con+1, color=c_I,
-                 linestyle="-", head_width=0., head_length=0)
-        l1 = patches.FancyArrowPatch(posA=(3.5, 1.1), posB=(3.5, 0.45),
-                                     arrowstyle=patches.ArrowStyle(
-                                         ']-', widthA=2.0, lengthA=0., angleA=None),
-                                     linewidth=lw_con,   color=c_I, linestyle="-", zorder=10, mutation_scale=3,)
-        ax.add_patch(l1)
-        # plot filter
-        ax_I_in = ax.inset_axes([1.5, 0.25, 1.0, 0.5], transform=ax.transData)
-        x_f = np.linspace(-10, 10, 1000)
-        y_f = 1/(1 + np.exp(x_f))
-        ax_I_in.plot(x_f, y_f, color=c_I, lw=lw_f)
-        ax_I_in.set_xlim(-5.5, 1.2)
-        ax_I_in.set_ylim(0.225, 1.1)
-        ax_I_in.spines["right"].set_visible(False)
-        ax_I_in.spines["top"].set_visible(False)
-        ax_I_in.set_xticks([])
-        ax_I_in.set_yticks([])
-
-    # set limits and aspect ratio
-    ax.set_xlim(0, 4.5)
-    ax.set_ylim(ylim)
-    ax.spines["left"].set_visible(False)
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.spines["bottom"].set_visible(False)
-    ax.set_xticks([])
-    ax.set_yticks([])
-    return ax
-
-
-def circuit_dia_HP(ax, inhib=True, ylim=(0, 2.5), lw_c=4, lw_con=3,  c_E="tab:green", c_M="tab:blue", c_I="tab:grey", lw_sdf=0.5, lw_f=2, fs_labels=10, fs_eqn=8, fs_axis=5):
-    """ High-Pass circuit diagram
-    Args:
-        ax: axes to plot diagram in 
-        inhib: plot inhibition (Bool)
-        ylim: axis ylim
-        lw_c: FFI line width
-        lw_con: connection line width
-        c_E: color for exictatory input
-        c_M: color for mixed input
-        c_I: color for inhibition
-        lw_sdf: SDF line width
-        lw_f: filter line width
-        fs_labels: label font size
-        fs_eqn: equation font size
-        fs_axis: aixe font size
-    Returns:
-        ax with diagram
-    """
-
-    E_rect = patches.Rectangle((0, 1.25), 1.5, 1, linewidth=lw_con, clip_on=False,
-                               edgecolor=c_E, facecolor='none', linestyle="-", zorder=10)
-    ax.add_patch(E_rect)
-
-    M_rect = patches.Rectangle((2.75, 1.25), 1.5, 1, linewidth=lw_c, clip_on=False,
-                               edgecolor=c_M, facecolor='none', linestyle="-", zorder=10)
-    ax.add_patch(M_rect)
-
-    # add excitatory connection
-    ax.arrow(1.5, 1.75, 0.9, 0., linewidth=lw_con, color=c_E,
-             linestyle="-", head_width=0.15, head_length=-0.2)
-
-    # plot E SDF
-    ax_E_in = ax.inset_axes([0.25, 1.325, 1, 0.5],
-                            transform=ax.transData)  # x, y, width, height
-    ax_E_in.set_title("SDF", fontsize=fs_axis, pad=-
-                      4, color=c_E, weight="bold")
-    VGS = pd.read_csv("./data/exp/VGS_BS_SDF_groups_sel_n_70.csv")
-    sat_VGS = np.linspace(0.25, 1.35, VGS.shape[1])
-    sdf_t = np.arange(VGS.shape[0])
-    for i in range(0, VGS.shape[1]):
-        ax_E_in.plot(sdf_t, VGS.iloc[:, i], linewidth=lw_sdf, alpha=0.25, color=lighten_color(
-            c_E, sat_VGS[i]))  # color=c_E) #,
-    ax_E_in.set_xlim(0, 250000)
-    ax_E_in.spines["right"].set_visible(False)
-    ax_E_in.spines["top"].set_visible(False)
-    ax_E_in.spines["left"].set_visible(False)
-    ax_E_in.spines["bottom"].set_visible(False)
-    ax_E_in.set_xticks([])
-    ax_E_in.set_yticks([])
-
-    # add text
-    ax.text(3.5, 2.6, "NS Model", fontsize=fs_labels,
-            color=c_M, ha="center", va="center", weight="bold")
-    ax.text(3.5, 1.75, "$\sum$ I", fontsize=fs_eqn, color=c_M,
-            weight="bold", ha="center", va="center")
-
-    if inhib:
-        ax.arrow(2, 1.75, 0, -0.575, linewidth=lw_con, color=c_E,
-                 linestyle="-", head_width=0.225, head_length=-0.15)
-
-        I_rect = patches.Rectangle((1.25, 0), 1.5, 1, linewidth=lw_con, clip_on=False,
-                                   edgecolor=c_I, facecolor='none', linestyle="-", zorder=10)
-        ax.add_patch(I_rect)
-
-        ax.arrow(2.75, 0.5, 0.775, 0, linewidth=lw_con-1, color=c_I,
-                 linestyle="-", head_width=0., head_length=0)
-
-        l1 = patches.FancyArrowPatch(posA=(3.5, 1.1), posB=(3.5, 0.45),
-                                     arrowstyle=patches.ArrowStyle(
-                                         ']-', widthA=2.0, lengthA=0., angleA=None),
-                                     linewidth=lw_con,   color=c_I, linestyle="-", zorder=10, mutation_scale=3,)
-        ax.add_patch(l1)
-        # plot filter
-        ax_I_in = ax.inset_axes([1.5, 0.25, 1.0, 0.5], transform=ax.transData)
-        x_f = np.linspace(-10, 10, 1000)
-        y_f = (1/(1+np.exp(-(x_f - 2)/0.2))) * (1/(1+np.exp((x_f - 8)/0.5)))
-
-        ax_I_in.plot(x_f, y_f, color=c_I, lw=lw_f)
-        ax_I_in.set_xlim(0., 10)
-        ax_I_in.set_ylim(0.225, 1.1)
-        ax_I_in.spines["right"].set_visible(False)
-        ax_I_in.spines["top"].set_visible(False)
-        ax_I_in.set_xticks([])
-        ax_I_in.set_yticks([])
-
-    # set limits and aspect ratio
-    ax.set_xlim(0, 4.5)
-    ax.set_ylim(ylim)
-    ax.spines["left"].set_visible(False)
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.spines["bottom"].set_visible(False)
-    ax.set_xticks([])
-    ax.set_yticks([])
-    return ax
-
-
 def circuit_dia_LP(ax, inhib=True, ylim=(0, 2.5), lw_c=4, lw_con=3,  c_E="tab:green", c_M="tab:blue", c_I="tab:grey", lw_sdf=0.5, lw_f=2, fs_labels=10, fs_eqn=8, fs_axis=5):
     """ Low-Pass circuit diagram
     Args:
@@ -325,10 +131,9 @@ def circuit_dia_LP(ax, inhib=True, ylim=(0, 2.5), lw_c=4, lw_con=3,  c_E="tab:gr
              linestyle="-", head_width=0.15, head_length=-0.2)
 
     # plot E SDF
-    ax_E_in = ax.inset_axes([0.25, 1.325, 1, 0.5],
+    ax_E_in = ax.inset_axes([0.25, 1.325, 1, 1.0],
                             transform=ax.transData)  # x, y, width, height
-    ax_E_in.set_title("SDF", fontsize=fs_axis, pad=-
-                      4, color=c_E, weight="bold")
+    ax_E_in.set_title("SDF", fontsize=fs_axis, pad=0, color=c_E, weight="bold")
     VGS = pd.read_csv("./data/exp/VGS_BS_SDF_groups_sel_n_70.csv")
     sat_VGS = np.linspace(0.25, 1.35, VGS.shape[1])
     sdf_t = np.arange(VGS.shape[0])
@@ -344,13 +149,13 @@ def circuit_dia_LP(ax, inhib=True, ylim=(0, 2.5), lw_c=4, lw_con=3,  c_E="tab:gr
     ax_E_in.set_yticks([])
 
     # add text
-    ax.text(3.5, 2.5, "NS Model", fontsize=fs_labels,
+    ax.text(3.5, 2.64, "NS Model", fontsize=fs_labels,
             color=c_M, ha="center", va="center", weight="bold")
     ax.text(3.5, 1.75, "$\sum$ I", fontsize=fs_eqn, color=c_M,
             weight="bold", ha="center", va="center")
 
     if inhib:
-        ax.arrow(2, 1.75, 0, -0.575, linewidth=lw_con, color=c_E,
+        ax.arrow(2, 1.75, 0, -0.5, linewidth=lw_con, color=c_E,
                  linestyle="-", head_width=0.225, head_length=-0.15)
 
         I_rect = patches.Rectangle((1.25, 0), 1.5, 1, linewidth=lw_c, clip_on=False,
@@ -407,13 +212,13 @@ def circuit_dia_HP(ax, inhib=True, ylim=(0, 2.5), lw_c=4, lw_con=3,  c_E="tab:gr
     Returns:
         ax with diagram
     """
-
     E_rect = patches.Rectangle((0, 1.25), 1.5, 1, linewidth=lw_c, clip_on=False,
                                edgecolor=c_E, facecolor='none', linestyle="-", zorder=10)
     ax.add_patch(E_rect)
 
     M_rect = patches.Rectangle((2.75, 1.25), 1.5, 1, linewidth=lw_c, clip_on=False,
                                edgecolor=c_M, facecolor='none', linestyle="-", zorder=10)
+    ax.add_patch(M_rect)
     ax.add_patch(M_rect)
 
     # add excitatory connection
@@ -440,7 +245,7 @@ def circuit_dia_HP(ax, inhib=True, ylim=(0, 2.5), lw_c=4, lw_con=3,  c_E="tab:gr
     ax_E_in.set_yticks([])
 
     # add text
-    ax.text(3.5, 2.6, "NS Model", fontsize=fs_labels,
+    ax.text(3.5, 2.77, "NS Model", fontsize=fs_labels,
             color=c_M, ha="center", va="center", weight="bold")
     ax.text(3.5, 1.75, "$\sum$ I", fontsize=fs_eqn, color=c_M,
             weight="bold", ha="center", va="center")
@@ -487,7 +292,7 @@ def circuit_dia_HP(ax, inhib=True, ylim=(0, 2.5), lw_c=4, lw_con=3,  c_E="tab:gr
     return ax
 
 
-def circuit_dia_OU(ax, ylim=(0, 2.5), lw_c=4, lw_con=3,  c_E="tab:green", c_M="tab:blue", c_gE="tab:grey", c_gI="tab:purple",  lw_sdf=0.5, lw_f=2, fs_labels=10, fs_eqn=8, fs_axis=5):
+def circuit_dia_OU(ax, ylim=(0, 2.5), lw_c=4, lw_con=3,  c_E="tab:green", c_M="tab:blue", c_gE="tab:grey", c_gI="tab:purple",  lw_sdf=0.5, lw_f=2, fs_labels=10, fs_labels2=10, fs_eqn=8, fs_axis=5):
     """ Synaptic Bombardment circuit diagram
     Args:
         ax: axes to plot diagram in 
@@ -518,10 +323,9 @@ def circuit_dia_OU(ax, ylim=(0, 2.5), lw_c=4, lw_con=3,  c_E="tab:green", c_M="t
              linestyle="-", head_width=0.15, head_length=-0.2)
 
     # plot E SDF
-    ax_E_in = ax.inset_axes([0.25, 1.325, 1, 0.5],
+    ax_E_in = ax.inset_axes([0.25, 1.325, 1, 1.0],
                             transform=ax.transData)  # x, y, width, height
-    ax_E_in.set_title("SDF", fontsize=fs_axis, pad=-
-                      4, color=c_E, weight="bold")
+    ax_E_in.set_title("SDF", fontsize=fs_axis, pad=0, color=c_E, weight="bold")
     VGS = pd.read_csv("./data/exp/VGS_BS_SDF_groups_sel_n_70.csv")
     sat_VGS = np.linspace(0.25, 1.35, VGS.shape[1])
     sdf_t = np.arange(VGS.shape[0])
@@ -537,7 +341,7 @@ def circuit_dia_OU(ax, ylim=(0, 2.5), lw_c=4, lw_con=3,  c_E="tab:green", c_M="t
     ax_E_in.set_yticks([])
 
     # add text
-    ax.text(3.5, 2.5, "NS Model", fontsize=fs_labels,
+    ax.text(3.5, 2.6, "NS Model", fontsize=fs_labels,
             color=c_M, ha="center", va="center", weight="bold")
     ax.text(3.5, 1.75, "$\sum$ I", fontsize=fs_eqn, color=c_M,
             weight="bold", ha="center", va="center")
@@ -561,8 +365,8 @@ def circuit_dia_OU(ax, ylim=(0, 2.5), lw_c=4, lw_con=3,  c_E="tab:green", c_M="t
     ax.add_patch(l1_I_M_cap)
 
     # text for ge and gi
-    ax.annotate("g$_e$(t)", (1, 0.19), color=c_gE, fontsize=fs_labels)
-    ax.annotate("g$_i$(t)", (3.05, 0.19), color=c_gI, fontsize=fs_labels)
+    ax.annotate("g$_e$(t)", (1.05, 0.15), color=c_gE, fontsize=fs_labels2)
+    ax.annotate("g$_i$(t)", (3.125, 0.15), color=c_gI, fontsize=fs_labels2)
 
     # set limits and aspect ratio
     ax.set_xlim(0, 4.5)

@@ -148,6 +148,13 @@ FS_tplot = (np.array(FS_ex_df.loc[FS_ex_ind, 't'].values[0]) -
 FS_tstart_ind = np.argwhere(FS_t <= FS_tstart)[-1][0]
 FS_tend_ind = np.argwhere(FS_t >= FS_tend)[0][0] - 1
 
+#%%
+
+max_F_NS = np.zeros((patch_NS['patch_NS'].shape[0], 1))
+for i in range(patch_NS['patch_NS'].shape[0]):
+    max_F_NS[i] = np.max(patch_NS['patch_NS'][i, 1])
+
+max_F_NS_df = pd.DataFrame(data=max_F_NS)
 # %% Create Figure
 np.random.seed(0)  # set seed for stripplot jitter
 pval_thresh = [[1e-3, "***"], [1e-2, "**"], [0.05, "*"], [1, "ns"]]

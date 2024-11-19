@@ -8,7 +8,7 @@ First install the required packages in ```./requirements.txt```
 ```
 pip install -r requirements.txt
 ```
-Then run the python (.py) files in the ```./figures``` directory to reproduce the figures.
+Then run the python (.py) files in the ```./figures/src``` directory to reproduce the figures.
 
 
 

@@ -63,13 +63,12 @@ df = DataFrame(CSV.File(datadir("exp", "Summary_Decay.csv")))
 
 # read in BS SDF
 VGS_orig = Matrix(CSV.read(datadir("exp", "VGS_BS_SDF_groups_sel_n_70.csv"), DataFrame, header = false))
-sdf_t_orig = Array(CSV.read(datadir("exp", "BS_sdf_t_groups_new.csv"), DataFrame, header = false)) .- 100
+sdf_t_orig = Array(CSV.read(datadir("exp", "BS_sdf_t_groups.csv"), DataFrame, header = false)) .- 100
 first500_ind = (0 .<= sdf_t_orig[1, :] .<= 500.0)
 first_500 = VGS_orig[first500_ind, :]
 VGS = vcat(first_500, first_500, VGS_orig)
 sdf_t = vcat(sdf_t_orig[1, first500_ind] .- 1000.01, sdf_t_orig[1, first500_ind] .- 500.01, sdf_t_orig[1, :])
 sdf_ind = sdf_t[:] .<= 2501.0
-
 
 #%% model setup and initial conditions 
 cm = 1 #uF/cm2
@@ -105,12 +104,13 @@ tsteps = 0.0:samp_rate:sim_end
 
 p_ic = [I, gleak, gKd, gNa, gM, gL, gT, ENa, EK, ECa, cm, VT, Vx, τmax]
 ic = Pospischil_steady(V0, VT, p_ic)# run to steady state
-u0 = [μe, μi];
+
 tspan = (0.0, 1000.0);
 Ee = 0
 Ei = -75
 
 #%% VGS input %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+u0 = [μe, μi* 0.35];
 t_diff = 650.0
 tspan = (-1000.0, 2500.0)
 tsteps = tspan[1]+100:0.01:tspan[2]
@@ -130,7 +130,8 @@ bins = collect(tsteps[1]:bin_size:tsteps[end])
 spikes_all = mapreduce(permutedims, vcat, [[[] for i ∈ 1:size(VGS)[2]] for i ∈ 1:size(τ_fit)[1]])
 spike_raster_all = zeros(size(τ_fit)[1], Int(tspan[2] - tspan[1]) * 100)
 I = 0.0
-g = 4.0 #3.75
+g = 3. 
+
 gscale = g / maximum(VGS)
 
 global VGS_int = [LinearInterpolation(sdf_t[sdf_ind], VGS[sdf_ind, ii]) for ii in range(1, size(VGS)[2])]
@@ -140,14 +141,14 @@ Threads.@threads for i in 1:size(τ_fit)[1]
 	p_ic = [I, gleak, gKd, gNa, gM, gL, gT, ENa, EK, ECa, cm, VT, Vx, τ_fit[i]]# for each model use fit tau
 	ic = Pospischil_steady(V0, VT, p_ic) # for each model use fit tau
 
-	p_exp = [I, gleak, gKd, gNa, gM, gL, gT, ENa, EK, ECa, cm, VT, Vx, τ_fit[i], Θe, μe, σe, τe, Θi, μi * 0.2, σi, τi, Ee, Ei]
+	p_exp = [I, gleak, gKd, gNa, gM, gL, gT, ENa, EK, ECa, cm, VT, Vx, τ_fit[i], Θe, μe, σe, τe, Θi, μi * 0.35, σi, τi, Ee, Ei]
 	u0 = [ic..., μe, μi]
 	prob_exp_ic = SDEProblem(Pospischil_SDE!, syn_noise!, u0, (0, 10000.0), p_exp, save_everystep = true, save_end = true, save_start = false, dtmax = samp_rate, maxiters = 1e25, seed = i)
 	sol_exp_ic = solve(prob_exp_ic, saveat = tsteps)
 	ic_new = sol_exp_ic[end]
 
 	for j in range(1, size(VGS)[2])
-		p_exp = [I, gleak, gKd, gNa, gM, gL, gT, ENa, EK, ECa, cm, VT, Vx, τ_fit[i], gscale, j, Θe, μe, σe, τe, Θi, μi * 0.2, σi, τi, Ee, Ei]
+		p_exp = [I, gleak, gKd, gNa, gM, gL, gT, ENa, EK, ECa, cm, VT, Vx, τ_fit[i], gscale, j, Θe, μe, σe, τe, Θi, μi * 0.35, σi, τi, Ee, Ei]
 		u0_j = [ic_new..., μe, μi * 0.2]
 		prob_exp = SDEProblem(Pospischil_VGS_SDE_I!, syn_noise_VGS_I!, u0_j, tspan, p_exp, saveat = samp_rate, dtmax = samp_rate, maxiters = 1e25, seed = ((j - 1) * size(τ_fit)[1]) + i)
 		sol_exp = solve(prob_exp, saveat = tsteps)
@@ -208,14 +209,14 @@ writedlm(datadir("sims", "$(fname)_AI.csv"), AI_VGS, ',')
 
 df_psth = DataFrame(x = [Float64.(psth_VGS[i]) for i in 1:size(psth_VGS)[1]])
 df_psth_t = DataFrame(x = [Float64.(psth_t_VGS[i]) for i in 1:size(psth_t_VGS)[1]])
-CSV.write(datadir("sims", "$(fname)_psth_g_$(g).csv"), df_psth)
-CSV.write(datadir("sims", "$(fname)_psth_t_g_$(g).csv"), df_psth_t)
+CSV.write(datadir("sims", "$(fname)_psth.csv"), df_psth)
+CSV.write(datadir("sims", "$(fname)_psth_t.csv"), df_psth_t)
 
 using DataFrames;
 τ_step_df = CSV.read(datadir("sims", "Pospischil_step_sim_tau.csv"), DataFrame; header = false);
 τ_step = Vector{Float64}(vec(Array(τ_step_df)))
 
-fname = "Pospischil_TAU_filter_OU_sim_E_$(round(μe, digits=4))_I_$(round(μi, digits=4))_g_$(g)"
+fname = "Pospischil_TAU_filter_OU_sim"
 df = DataFrame("τ_step" => log10.(τ_step), "τ_VGS" => log10.(τ_VGS))
 CSV.write(datadir("sims", "$(fname).csv"), df)
 
@@ -223,6 +224,6 @@ using DataFrames;
 df = CSV.read(datadir("sims", "Pospischil_step_sim_AI.csv"), DataFrame; header = false);
 AI_step = Vector{Float64}(vec(Array(df)))
 
-fname = "Pospischil_TAU_filter_OU_sim_E_$(round(μe, digits=4))_I_$(round(μi, digits=4))_AI_g_$(g)"
+fname = "Pospischil_TAU_filter_OU_sim_AI"
 df = DataFrame("AI_step" => AI_step, "AI_VGS" => AI_VGS)
 CSV.write(datadir("sims", "$(fname).csv"), df)

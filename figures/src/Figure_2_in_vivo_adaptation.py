@@ -96,6 +96,10 @@ cell_2_spikes = generate_spike_train(
     numtrials, 1, F0, F1, tend, tstim, stim_num_spikes)
 
 
+#%%
+sdf_t[0] < 0.
+
+VGS_narrow.loc[sdf_t[0] < 0., :].mean().describe()
 # %% Create Figure
 np.random.seed(0)  # set seed for stripplot jitter
 
