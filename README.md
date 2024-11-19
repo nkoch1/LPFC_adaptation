@@ -1,3 +1,4 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13323359.svg)](https://doi.org/10.5281/zenodo.13323359)
 # Code for Koch _et al._ 2024 
 
 This repository contains the data and code for reproducing the figures in Koch _et al._ (2024)
