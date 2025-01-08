@@ -1,7 +1,9 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13323359.svg)](https://doi.org/10.5281/zenodo.13323359)
 # Code for Koch _et al._ 2024 
 
-This repository contains the data and code for reproducing the figures in Koch _et al._ (2024)
+This repository contains the data and code for reproducing the figures in the following publication:
+
+Koch, N. A., Corrigan, B. W., Feyerabend, M., Gulli, R. A., Jimenez-Sosa, M. S., Abbass, M., … Martinez-Trujillo, J. C. (2025). Spike frequency adaptation in primate lateral prefrontal cortex neurons results from interplay between intrinsic properties and circuit dynamics. Cell Reports, 44(1), 115159. doi:[10.1016/j.celrep.2024.115159](https://doi.org/10.1016/j.celrep.2024.115159)
 
 
 ## Figures
@@ -29,3 +31,10 @@ To reproduce the simulations, do the following:
    ```
    This will install all necessary packages for you to be able to run the scripts andeverything should work out of the box, including correctly finding local paths.
 3. Run the Julia (.jl) scripts in the ```./scripts``` directory
+
+## License
+<!-- [![License: CC BY 4.0](https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by.png)](https://creativecommons.org/licenses/by/4.0/) -->
+
+[<img src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by.png" style="width: 150px" >](https://creativecommons.org/licenses/by/4.0/)
+
+This repository is licensed under a Creative Commons Attribution 4.0 International License.
